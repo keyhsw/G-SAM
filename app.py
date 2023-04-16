@@ -306,8 +306,8 @@ if __name__ == "__main__":
                     source='upload', type="pil", value="demo1.jpg")
                 task_type = gr.Dropdown(
                     ["det", "seg", "inpainting", "automatic"], value="automatic", label="task_type")
-                text_prompt = gr.Textbox(label="Text Prompt", label="categories (separated by .)")
-                inpaint_prompt = gr.Textbox(label="Inpaint Prompt", label="The new image should be...")
+                text_prompt = gr.Textbox(label="Text Prompt", placeholder="dog . cat . bench .")
+                inpaint_prompt = gr.Textbox(label="Inpaint Prompt", placeholder="a sofa in a living room .")
                 run_button = gr.Button(label="Run")
                 with gr.Accordion("Advanced options", open=False):
                     box_threshold = gr.Slider(
