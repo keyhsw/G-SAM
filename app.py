@@ -7,6 +7,7 @@ os.system("python -m pip install -e GroundingDINO")
 os.system("pip install --upgrade diffusers[torch]")
 os.system("pip install opencv-python pycocotools matplotlib onnxruntime onnx ipykernel")
 os.system("wget https://github.com/IDEA-Research/Grounded-Segment-Anything/raw/main/assets/demo1.jpg")
+os.system("wget https://huggingface.co/ShilongLiu/GroundingDINO/resolve/main/groundingdino_swint_ogc.pth")
 os.system("wget https://huggingface.co/spaces/mrtlive/segment-anything-model/resolve/main/sam_vit_h_4b8939.pth")
 sys.path.append(os.path.join(os.getcwd(), "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "segment_anything"))
@@ -305,9 +306,9 @@ if __name__ == "__main__":
                 input_image = gr.Image(
                     source='upload', type="pil", value="demo1.jpg")
                 task_type = gr.Dropdown(
-                    ["det", "seg", "inpainting", "automatic"], value="automatic", label="task_type")
-                text_prompt = gr.Textbox(label="Text Prompt", placeholder="dog . cat . bench .")
-                inpaint_prompt = gr.Textbox(label="Inpaint Prompt", placeholder="a sofa in a living room .")
+                    ["det", "seg", "inpainting", "automatic"], value="seg", label="task_type")
+                text_prompt = gr.Textbox(label="Text Prompt", placeholder="bear . beach .")
+                inpaint_prompt = gr.Textbox(label="Inpaint Prompt", placeholder="A dinosaur, detailed, 4K.")
                 run_button = gr.Button(label="Run")
                 with gr.Accordion("Advanced options", open=False):
                     box_threshold = gr.Slider(
