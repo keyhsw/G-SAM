@@ -202,6 +202,14 @@ def run_grounded_sam(input_image, text_prompt, task_type, inpaint_prompt, box_th
 
     boxes_filt = boxes_filt.cpu()
 
+    # nms
+    print(f"Before NMS: {boxes_filt.shape[0]} boxes")
+    nms_idx = torchvision.ops.nms(
+        boxes_filt, scores, iou_threshold).numpy().tolist()
+    boxes_filt = boxes_filt[nms_idx]
+    pred_phrases = [pred_phrases[idx] for idx in nms_idx]
+    print(f"After NMS: {boxes_filt.shape[0]} boxes")
+
     if task_type == 'seg' or task_type == 'inpainting' or task_type == 'automatic':
         if sam_predictor is None:
             # initialize SAM
@@ -215,12 +223,6 @@ def run_grounded_sam(input_image, text_prompt, task_type, inpaint_prompt, box_th
 
         if task_type == 'automatic':
             # use NMS to handle overlapped boxes
-            print(f"Before NMS: {boxes_filt.shape[0]} boxes")
-            nms_idx = torchvision.ops.nms(
-                boxes_filt, scores, iou_threshold).numpy().tolist()
-            boxes_filt = boxes_filt[nms_idx]
-            pred_phrases = [pred_phrases[idx] for idx in nms_idx]
-            print(f"After NMS: {boxes_filt.shape[0]} boxes")
             print(f"Revise caption with number: {text_prompt}")
 
         transformed_boxes = sam_predictor.transform.apply_boxes_torch(
@@ -318,7 +320,7 @@ if __name__ == "__main__":
                         label="Text Threshold", minimum=0.0, maximum=1.0, value=0.25, step=0.001
                     )
                     iou_threshold = gr.Slider(
-                        label="IOU Threshold", minimum=0.0, maximum=1.0, value=0.5, step=0.001
+                        label="IOU Threshold", minimum=0.0, maximum=1.0, value=0.8, step=0.001
                     )
                     inpaint_mode = gr.Dropdown(
                         ["merge", "first"], value="merge", label="inpaint_mode")
